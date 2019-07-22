@@ -96,7 +96,7 @@ class Edge:
 class Graph:
     def __init__(self,directed = False):
         self.outgoing = []                              # can be list or doubly linked list
-        self.incoming = [] if directed else self.outgoing
+        self.incoming = [] if directed == True else self.outgoing
     
     def is_Directed(self):
         return self.outgoing is not self.incoming
@@ -129,15 +129,26 @@ class Graph:
     def insert_Vertex(self,x):
         v = Vertex(x)
         self.outgoing.append(v)
-        if self.is_Directed:
+        if self.is_Directed():
             self.incoming.append(v)
         return v
     
     def insert_edge(self,u,v,x):
         e = Edge(u,v,x)
         u.incidence_list.append(e)
-        v.incident_edges.append(e)
+        v.incidence_list.append(e)
         return e
+
+g = Graph()
+u= g.insert_Vertex('u')
+v = g.insert_Vertex('v')
+g.insert_edge(u,v,'e')
+w = g.insert_Vertex('w')
+g.insert_edge(u,w,'g')
+g.insert_edge(v,w,'f')
+z = g.insert_Vertex('z')
+g.insert_edge(w,z,'h')
+
     
 
 
