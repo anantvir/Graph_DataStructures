@@ -29,8 +29,18 @@ class DisjointSet:
         return setObject
     
     def Find_Set(self,item):
-        setObject = set_dict[item]
-        return setObject.head           # Representative of Set
+        if set_dict.get(item) is not None:
+            return set_dict[item].head
+        else:
+            for value in set_dict.values():
+                node = value.head
+                while node is not None:
+                    if node.info == item:
+                        return node.BACKWARD_LINK
+                    node = node.FORWARD_LINK
+                    
+                raise ValueError('Cannot find this item in any Disjoint Set') 
+                 # Representative of Set
 
     def Union(self,x,y):                # Implementation as per page 565 CLRS    
         x.tail.FORWARD_LINK = y.head
@@ -47,8 +57,6 @@ class DisjointSet:
         return x                        # Return new Disjoint set x
 
 
-        
-
 d = DisjointSet()
 s1 = d.Make_Set(25,'S1')
 s2 = d.Make_Set(8,'S2')
@@ -58,3 +66,6 @@ s4 = d.Make_Set(78,'S4')
 x = d.Union(s1,s2)
 y = d.Union(s3,s4)
 d.Union(x,y)
+a = d.Find_Set(8)
+b = d.Find_Set(78)
+print(a is b)
