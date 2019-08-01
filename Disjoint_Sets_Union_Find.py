@@ -2,7 +2,7 @@
 
 # ------------------------- Visual Representation for Linked List implementation on Page 565 CLRS --------------------------
 
-set_dict = {}               # Make it global to make the program simpler
+set_dict = {}               # Make it global to make the program simpler. Disjoint sets are stored here with key = representative of a set(i.e first element of linked list)
 class DisjointSet:
     class Node:
         def __init__(self,info,FORWARD_LINK = None, BACKWARD_LINK = None):
@@ -19,7 +19,7 @@ class DisjointSet:
         def __hash__(self):
             return hash(self.set_object_name)  
     
-    def Make_Set(self,item,setname):
+    def Make_Set(self,item,setname):            # Creates a new linked list, whose only object is 'item'
         setObject = self.SetObject(setname)
         newNode= self.Node(item)
         newNode.BACKWARD_LINK = setObject
@@ -32,7 +32,7 @@ class DisjointSet:
         setObject = set_dict[item]
         return setObject.head           # Representative of Set
 
-    def Union(self,x,y):      
+    def Union(self,x,y):                # Implementation as per page 565 CLRS    
         x.tail.FORWARD_LINK = y.head
         x.tail = y.tail
         node = y.head
@@ -40,11 +40,11 @@ class DisjointSet:
             node.BACKWARD_LINK = x
             node = node.FORWARD_LINK
         value = x.head.info
-        set_dict[value] = x
-        del set_dict[y.head.info]
-        y.head = None
+        set_dict[value] = x             # Create new disjoint set in set_dict
+        del set_dict[y.head.info]       # Remove old set 'y' as y has been merged with 'x' now
+        y.head = None                   # head and tail of 'y' are now None
         y.tail = None
-        return x
+        return x                        # Return new Disjoint set x
 
 
         
@@ -53,7 +53,8 @@ d = DisjointSet()
 s1 = d.Make_Set(25,'S1')
 s2 = d.Make_Set(8,'S2')
 s3 = d.Make_Set(225,'S3')
-d.Make_Set(78,'S4')
+s4 = d.Make_Set(78,'S4')
 
 x = d.Union(s1,s2)
-d.Union(x,s3)
+y = d.Union(s3,s4)
+d.Union(x,y)
