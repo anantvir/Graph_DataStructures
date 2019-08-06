@@ -11,7 +11,7 @@ class Vertex:
         return self._element
     
     def __hash__(self):
-        return hash(id(self))       # Has function created so that a vertex can be used as a key in a dict or set as dict keys need to be hashable objects !
+        return hash(id(self))       # Hash function created so that a vertex can be used as a key in a dict or set as dict keys need to be hashable objects !
 
 class Edge:
     def __init__(self,u,v,x):
@@ -35,7 +35,7 @@ class Graph:
     
     def __init__(self,directed = False):
         self._outgoing = {}                 # map to hold vertices as keys and their incidence collection dict as value
-                                            # i.e _outgoing = {u: {v : e},v: {u : e,w : f}   --> vertex u is attacjed to vertex v via edge e, similarly vertex 'w' is attached to vertex 'v' via edge 'f'
+                                            # i.e _outgoing = {u: {v : e},v: {u : e,w : f}   --> vertex u is attached to vertex v via edge e, similarly vertex 'w' is attached to vertex 'v' via edge 'f'
         self._incoming = {} if directed == True else self._outgoing     # create another map called '_incoming' only if 'directed' is True else, just refer to _outgoing for undirected graphs
 
     def is_directed(self):
@@ -51,8 +51,15 @@ class Graph:
         edges = set()
         for eachDict in self._outgoing.values():
             edges.add(eachDict.values())
-        return edges
+        return len(edges)
     
+    def edges(self):
+        edges = set()
+        for eachDict in self._outgoing.values():
+            for eachValue in eachDict.values():
+                edges.add(eachValue)
+        return edges
+
     def get_edge(self,u,v):
         return self._outgoing[u].get(v)                     # get(v) used because it returns None if v is not present in self._outgoing[u]. If we use self._outgoing[u][v], then it will give KeyError if v is not in self._outgoing[u]
 
@@ -75,3 +82,9 @@ class Graph:
     def insert_edge(self,u,v,value = None):
         e = Edge(u,v,value)                                 # Create new Edge instance
         self._outgoing[u][v] = e
+        self._incoming[v][u] = e
+    
+    def get_adj_map(self):
+        return self._outgoing
+
+
